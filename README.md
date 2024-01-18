@@ -1,66 +1,259 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Learning Laravel Sanctum
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel Sanctum](https://img.shields.io/badge/Laravel%20Sanctum-5.8-blue)](https://github.com/laravel/sanctum)
 
-## About Laravel
+## Introduction
+This is a task API which was developed as part of learning Laravel Sanctum.
+The task API provides a RESTful API to manage tasks with [Laravel Sanctum](https://github.com/laravel/sanctum) as it authentication mechanism.
+The API contains the basic CRUD operations, login, logout and register functionalities. 
+## Getting Started
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Install
+You need to install the [laravel/sanctum](https://github.com/laravel/sanctum) package to use this API.
+```bash
+composer require laravel/sanctum
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Run
+```bash
+php artisan serve
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Usage
+The API has the following endpoints:
+- **GET:** /api/tasks - Returns all tasks
+- **POST:** /api/tasks - Creates a new task
+- **GET:** /api/tasks/{id} - Returns a single task
+- **PUT:** /api/tasks/{id} - Updates an existing task
+- **DELETE:** /api/tasks/{id} - Deletes an existing task
+- **GET:** /api/login - Logs in a user
+- **GET:** /api/logout - Logs out a user
+- **GET:** /api/register - Registers a new user
 
-## Learning Laravel
+A user can only update or delete their own tasks.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Request
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Create Task
+When creating a task you need to pass the following parameters:
+- name: The name of the task
+- description: A description of the task
+- priority: The priority of the task, either 'low', 'medium', or 'high'
+- status: The status of the task, either 0 or 1 with 0 for 'in progress' and 1 for 'completed'.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Example:
+```json
+{
+    "name": "Task 1",
+    "description": "Description of task 1",
+    "priority": "medium",
+    "status": 0
+}
+```
 
-## Laravel Sponsors
+### Update Task
+When updating a task you need to pass the parameter you need to update:
+- name: The name of the task
+- description: A description of the task
+- priority: The priority of the task, either 'low', 'medium', or 'high'
+- status: The status of the task, either 0 or 1 with 0 for 'in progress' and 1 for 'completed'.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Example:
+```json
+{
+   
+    "status": 1
+}
+```
+### Login
+When logging in you need to pass the following parameters:
+- email: The email of the user
+- password: The password of the user
+Example:
+```json
+{
+    "email": "johndoe@test.com",
+    "password": "passw0rD+" 
+}
+```
 
-### Premium Partners
+### Register
+When registering you need to pass the following parameters:
+- name: The name of the user
+- email: The email of the user
+- password: The password of the user. The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+Example:
+```json
+{
+    "name": "John Doe",
+    "email": "johndoe@test.com",
+    "password": "passw0rD+"
+}
+```
+## Response
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Get Tasks
 
-## Contributing
+```json
+{
+    "data": [
+        {
+            "id": "4",
+            "attributes": {
+                "name": "Task 1",
+                "description": "Description of task 1",
+                "priority": "medium",
+                "status": 0,
+                "created_at": "2024-01-13T20:05:17.000000Z",
+                "updated_at": "2024-01-13T20:05:17.000000Z"
+            },
+            "relationships": {
+                "user": {
+                    "id": "1",
+                    "name": "John Doe",
+                    "email": "johndoe@test.com"
+                }
+            }
+        },
+        {
+            "id": "8",
+            "attributes": {
+                "name": "Task 2",
+                "description": "Description of task 2",
+                "priority": "low",
+                "status": 1,
+                "created_at": "2024-01-13T20:05:17.000000Z",
+                "updated_at": "2024-01-13T20:05:17.000000Z"
+            },
+            "relationships": {
+                "user": {
+                    "id": "1",
+                    "name": "John Doe",
+                    "email": "johndoe@test.com"
+                }
+            }
+        }
+      ]
+}
+        
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
 
-## Code of Conduct
+### Get Task
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```json
+{
+    "task": {
+        "id": "8",
+        "attributes": {
+            "name": "Task 1",
+            "description": "Description of task 1",
+            "priority": "low",
+            "status": 0,
+            "created_at": "2024-01-13T20:05:17.000000Z",
+            "updated_at": "2024-01-13T20:05:17.000000Z"
+        },
+        "relationships": {
+            "user": {
+                "id": "1",
+                "name": "John Doe",
+                "email": "johndoe@test.com"
+            }
+        }
+    }
+}
+```
 
-## Security Vulnerabilities
+### Create Task
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```json
+{
+    "task": {
+        "id": "8",
+        "attributes": {
+            "name": "Task 1",
+            "description": "Description of task 1",
+            "priority": "low",
+            "status": 0,
+            "created_at": "2024-01-13T20:05:17.000000Z",
+            "updated_at": "2024-01-13T20:05:17.000000Z"
+        },
+        "relationships": {
+            "user": {
+                "id": "1",
+                "name": "John Doe",
+                "email": "johndoe@test.com"
+            }
+        }
+    }
+}
+```
+### Update Task
+```json
+{
+    "task": {
+        "id": "8",
+        "attributes": {
+            "name": "Test 1",
+            "description": "Description of task 1",
+            "priority": "low",
+            "status": 1,
+            "created_at": "2024-01-13T20:05:17.000000Z",
+            "updated_at": "2024-01-13T20:05:17.000000Z"
+        },
+        "relationships": {
+            "user": {
+                "id": "1",
+                "name": "John Doe",
+                "email": "johndoe@test.com"
+            }
+        }
+    }
+}
+```
 
-## License
+### Delete Task
+```json
+{
+    "data": "",
+    "message": "Task deleted successfully",
+    "status": "Request was successful."
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Login
+```json
+{
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "johndoe@test.com",
+            "email_verified_at": null,
+            "created_at": "2024-01-11T19:40:27.000000Z",
+            "updated_at": "2024-01-11T19:40:27.000000Z"
+        },
+        "token": "7|6BcGraxg2DWcNvtIwEdi84lNawFfSXrAvUpxz4UVac716967"
+    },
+    "message": "Login successfully",
+    "status": "Request was successful."
+}
+```
+
+### Register
+```json
+{
+    "data": {
+        "user": {
+            "name": "John Doe",
+            "email": "johndoe@test.com",
+            "updated_at": "2024-01-18T09:27:13.000000Z",
+            "created_at": "2024-01-18T09:27:13.000000Z",
+            "id": 1
+        },
+        "token": "8|7gEl9WBvJng0oGeoPbsLOgom9iPkZg5a5K7KN6XJ18936090"
+    },
+    "message": "User created successfully",
+    "status": "Request was successful."
+}
+```
